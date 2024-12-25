@@ -1,0 +1,3 @@
+module cacheTest {
+  requires cache;
+}
