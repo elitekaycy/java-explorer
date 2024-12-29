@@ -1,6 +1,7 @@
 # Redis-like Java Server Implementation
 
 This project demonstrates a simple Redis-like server built in Java. The server listens for client connections over a socket, processes commands using the RESP (Redis Serialization Protocol), and responds accordingly. It implements basic Redis commands like PING, SET, and GET, showing how to handle parsing of client input, command handling, and data serialization.
+[reference to building redis in go](https://www.build-redis-from-scratch.dev/en/introduction)
 
 ## Overview of Redis
 
@@ -54,8 +55,8 @@ public interface RedisStore {
 
 The server listens on port 6379 and waits for incoming client connections. For each connection, it spawns a new thread to handle the client request:
 
+```java
 public class Main {
-```
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(6379)) {
             System.out.println("Server socket started on " + 6379);
@@ -80,7 +81,7 @@ CommandHandlerMapper: Maps commands to their respective handlers.
 
 The CommandHandlerMapper maps client commands to their respective handlers using a `Map<String, Command>`. Commands like `SET, GET, HSET, and HGET` are registered with their corresponding handler classes (e.g., SetCommand, GetCommand). When a command is received, the appropriate handler is fetched and executed, ensuring operations are performed on the in-memory store. This structure allows easy extension by adding new commands and handlers while maintaining consistent handling through the Command interface.
 
-```
+```java
 public class CommandHandler {
   public CommandHandlerMapper() {
     this.store = RedisStoreImpl.getInstance();
@@ -96,7 +97,7 @@ public class CommandHandler {
 #### 3. <b>RESP Parser</b>
 
 A custom parser handles the RESP input format. Here's a breakdown of the classes used for parsing:
-```
+```java
 public class RespParser {
     public RespValue parse(String input) {
      switch (type) {
@@ -131,7 +132,7 @@ Once the server receives a command, the appropriate response is sent back to the
 - For GET: The server returns the stored value for the given key.
 
 Example Code Snippet for RESP Response Handling:
-```
+```java
 public class PingCommand implements Command {
 
   @Override
@@ -147,7 +148,7 @@ public class PingCommand implements Command {
 #### 5. <b>Handling Multiple Clients</b>
 
 To handle multiple clients simultaneously, the server uses threads, where each client connection is processed in a separate thread, allowing concurrent handling. Locks are implemented in critical sections, such as the AofStore class, to ensure proper thread-safe access to shared resources. This prevents race conditions during file reads and writes. Additionally, certain classes, like RespSerializer and RedisStoreImpl, are implemented as singletons to optimize memory usage and ensure consistent access to shared instances across multiple threads. This combination of threading, locks, and singletons enhances performance and ensures data integrity.
-```
+```java
 public class ClientHandler implements Runnable {
 
     private final Socket clientSocket;
@@ -169,7 +170,7 @@ To run the Redis-like server, follow these steps:
 1. Compile and run the Code:
 
 Run the build sh file in the directory path for linux or mac or equivalent in intellij is to run the Main.java
-```
+```sh
 ./build.sh
 ```
 
@@ -178,7 +179,9 @@ Run the build sh file in the directory path for linux or mac or equivalent in in
 
 You can use telnet to connect to the server and test it:
 
+```sh
 telnet localhost 6379
+```
 
 4. Test the Commands
 
@@ -188,20 +191,20 @@ Once connected, you can test the following commands:
 
 #### Ping Command
 
-```
+```sh
 PING
 ```
-```
+```sh
 Expected response:
 +PONG
 ```
 
 #### Set Command
 
-```
+```sh
 SET key value
 ```
-```
+```java
 Expected response:
 
 Value{typ: ARRAY, array = [
@@ -213,10 +216,10 @@ Value{typ: ARRAY, array = [
 
 #### HSet Command
 
-```
+```sh
 HSET key value pair
 ```
-```
+```java
 Expected response:
 
 Value{typ: ARRAY, array = [
@@ -230,7 +233,7 @@ Value{typ: ARRAY, array = [
 
 #### database.aof
 This represents how the persisted storage would look like `SET key value`
-```
+```txt
 *3
 $3
 SET
@@ -242,14 +245,14 @@ value
 ```
 
 #### Get Command
-```
+```sh
 GET key
 
 Expected response: value
 ```
 
 #### Hget Command
-```
+```sh
 HGET key value
 
 Expected response: pair
