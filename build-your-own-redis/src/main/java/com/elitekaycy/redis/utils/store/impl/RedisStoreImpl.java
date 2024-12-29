@@ -7,8 +7,18 @@ import utils.store.RedisStore;
 
 public class RedisStoreImpl implements RedisStore {
 
-  private final Map<String, String> strings = new ConcurrentHashMap<>();
-  private final Map<String, Map<String, String>> hashes = new ConcurrentHashMap<>();
+  private static final Map<String, String> strings = new ConcurrentHashMap<>();
+  private static final Map<String, Map<String, String>> hashes = new ConcurrentHashMap<>();
+
+  private RedisStoreImpl() {}
+
+  private static class RedisStoreHolder {
+    private static final RedisStoreImpl INSTANCE = new RedisStoreImpl();
+  }
+
+  public static RedisStoreImpl getInstance() {
+    return RedisStoreHolder.INSTANCE;
+  }
 
   @Override
   public void set(String key, String value) {
@@ -22,11 +32,11 @@ public class RedisStoreImpl implements RedisStore {
 
   @Override
   public void hset(String key, String field, String value) {
-    hashes.computeIfAbsent(key, k -> new ConcurrentHashMap<String, String>()).put(field, value);
+    hashes.computeIfAbsent(key, k -> new ConcurrentHashMap<>()).put(field, value);
   }
 
   @Override
   public String hget(String key, String field) {
-   return Optional.ofNullable(hashes.get(key)).map(hash -> hash.get(field)).orElse(null);
+    return Optional.ofNullable(hashes.get(key)).map(hash -> hash.get(field)).orElse(null);
   }
 }

@@ -12,15 +12,18 @@ import utils.cli.Command;
 import utils.cli.CommandHandlerMapper;
 import utils.resp.RespType;
 import utils.resp.RespValue;
+import utils.store.impl.AofStore;
 
 public class ClientHandler implements Runnable {
 
   private Socket socket;
   private CommandHandlerMapper handler;
+  private AofStore aofStore;
 
-  public ClientHandler(Socket socket, CommandHandlerMapper handler) {
+  public ClientHandler(Socket socket, CommandHandlerMapper handler, AofStore aofStore) {
     this.socket = socket;
     this.handler = handler;
+    this.aofStore = aofStore;
   }
 
   @Override
@@ -42,6 +45,9 @@ public class ClientHandler implements Runnable {
         Command handler = this.handler.getHandler(commandName);
         if (handler != null) {
           RespValue response = handler.execute(args);
+          if (commandName.equals("SET") || commandName.equals("HSET")) {
+            aofStore.write(response);
+          }
           writer.println(response);
         } else {
           writer.println("ERROR: Unknown command");

@@ -16,13 +16,17 @@ public class CommandHandlerMapper {
     handler.put("PING", CommandHandlerMapper::ping);
     handler.put("SET", new SetCommand(this.store));
     handler.put("GET", new GetCommand(this.store));
+    handler.put("HGET", new HgetCommand(this.store));
+    handler.put("HSET", new HsetCommand(this.store));
   }
 
   public CommandHandlerMapper() {
-    this.store = new RedisStoreImpl();
+    this.store = RedisStoreImpl.getInstance();
     handler.put("PING", CommandHandlerMapper::ping);
     handler.put("SET", new SetCommand(this.store));
     handler.put("GET", new GetCommand(this.store));
+    handler.put("HGET", new HgetCommand(this.store));
+    handler.put("HSET", new HsetCommand(this.store));
   }
 
   public Command getHandler(String name) {
