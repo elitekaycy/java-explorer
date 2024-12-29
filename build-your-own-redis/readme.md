@@ -41,7 +41,7 @@ Sample Commands Implemented:
 
 The server uses an in-memory store with a Map<String, String> for key-value pairs and Map<String, Map<String, String>> for hash storage. An Append Only File (AOF) mechanism logs every write operation to ensure data persistence.
 
-```
+```java
 public interface RedisStore {
   void set(String key, String value);
   String get(String key);
