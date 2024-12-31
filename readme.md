@@ -8,6 +8,7 @@ The goal is to deepen understanding of core concepts and create practical implem
 ### 1. Systems Design Concepts
 - [Building a caching layer (e.g., LRU Cache, Write-through Cache)](./build-your-own-simple-cache/)
 - [Building Redis from scratch](./build-your-own-redis/)
+- [Build your own json parser](./build-your-own-json-parser/)
 - Designing scalable and distributed systems
 
 ### 2. Databases and Query Processing
