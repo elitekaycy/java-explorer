@@ -14,6 +14,10 @@ public class JsonObject extends JsonValue {
     pairs.add(keyvalue);
   }
 
+  public List<JsonKeyValue> getAll() {
+   return pairs;
+  }
+
   @Override
   public String toString() {
     StringBuilder objString = new StringBuilder();

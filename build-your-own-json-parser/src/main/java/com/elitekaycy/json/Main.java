@@ -2,10 +2,23 @@ package com.elitekaycy.json;
 
 import com.elitekaycy.json.lexer.Lexer;
 import com.elitekaycy.json.lexer.TokenType;
+import com.elitekaycy.json.model.JsonObject;
 import com.elitekaycy.json.parser.Parser;
+import com.elitekaycy.json.test.JsonTest;
+import com.elitekaycy.json.util.JavaToJsonMapper;
 import java.util.List;
 
 public class Main {
+
+  static class Person {
+    private final String name;
+    private final int age;
+
+    public Person(String name, int age) {
+      this.name = name;
+      this.age = age;
+    }
+  }
 
   public static void main(String[] args) {
     String adv =
@@ -15,9 +28,26 @@ public class Main {
     Lexer lexer = new Lexer(adv);
     List<TokenType<?>> tokens = lexer.tokenize();
     Parser parser = new Parser(tokens);
-
     Object parsed = parser.parse();
 
     System.out.println(parsed);
+
+    // Testing mapping a java object to a json string
+    Person testPerson = new Person("dickson", 23);
+
+    /**
+     * Here I try to parse a Person Object to json string 
+     */
+    String jsonify = JavaToJsonMapper.toJson(testPerson);
+
+    /*
+     * Here i try to parse a Person Object to json Object 
+     */
+    JsonObject parsify = (JsonObject) JavaToJsonMapper.parse(testPerson);
+
+    System.out.println(jsonify);
+    System.out.println(parsify.toString());
+
+    JsonTest.test();
   }
 }

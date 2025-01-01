@@ -88,65 +88,107 @@ public class Main {
 
 You can use Java Reflection to convert Java objects into JSON. This is useful for serializing objects to JSON format dynamically at runtime.
 
-```
-Example of using reflection to convert a Java object into a JSON string:
 
-import java.lang.reflect.Field;
+#### How it works
+Serialization (toJson)
 
-public class JsonConverter {
-    public static String toJson(Object obj) {
-        StringBuilder json = new StringBuilder("{");
-        Field[] fields = obj.getClass().getDeclaredFields();
-        
-        for (Field field : fields) {
-            field.setAccessible(true);
-            try {
-                json.append("\"")
-                    .append(field.getName())
-                    .append("\": \"")
-                    .append(field.get(obj))
-                    .append("\", ");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        if (json.length() > 1) {
-            json.setLength(json.length() - 2);
-        }
-        json.append("}");
-        
-        return json.toString();
-    }
-    
-    public static void main(String[] args) {
-        Person person = new Person("John", 30, true);
-        String jsonString = toJson(person);
-        System.out.println(jsonString);
-    }
-    
-    static class Person {
-        private String name;
-        private int age;
-        private boolean isMarried;
-        
-        public Person(String name, int age, boolean isMarried) {
-            this.name = name;
-            this.age = age;
-            this.isMarried = isMarried;
-        }
-    }
-}
+The toJson method uses reflection to inspect the fields of a given object and map them to JSON keys. It handles various data types, including primitives, collections, maps, and nested objects.
 
-```
+[view this file for more...](./src/main/java/com/elitekaycy/json/util/JavaToJsonMapper.java)
 
-This will generate a JSON string representation of the Person object:
 ```java
-{
-  "name": "John",
-  "age": "30",
-  "isMarried": "true"
-}
+  public static String toJson(Object obj) {
+    Class<?> clazz = obj.getClass();
+
+    if (clazz.isPrimitive() || obj instanceof String || obj instanceof Number || obj instanceof Boolean) {
+      return "\"" + obj.toString() + "\"";
+    }
+    ...
+    for (Field field : fields) {
+      field.setAccessible(true);
+      try {
+        Object fieldValue = field.get(obj);
+        json.append("\"")
+            .append(field.getName())
+            .append("\":")
+            .append(toJson(fieldValue))
+            .append(",");
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    }
+    if (fields.length > 0) json.setLength(json.length() - 1);
+    json.append("}");
+    return json.toString();
+  }
+
+```
+Deserialization (toObject)
+
+The toObject method parses a JSON string into a Java object by creating an instance of the specified class and populating its fields based on the JSON structure.
+
+[view this file for more...](./src/main/java/com/elitekaycy/json/util/JavaToJsonMapper.java)
+```java
+public static <T> T toObject(String json, Class<T> cls) {
+    JsonObject parser = (JsonObject) new Parser(new Lexer(json).tokenize()).parse();
+    try {
+      T object = createInstance(cls);
+      for (JsonKeyValue kv : parser.getAll()) {
+        try {
+          Field field = cls.getDeclaredField(kv.getKey());
+          field.setAccessible(true);
+
+          if (field.getType().equals(String.class) && kv.getValue() instanceof JsonString) {
+            field.set(object, ((JsonString) kv.getValue()).getValue());
+          } else if (Number.class.isAssignableFrom(field.getType())
+              && kv.getValue() instanceof JsonNumber) {
+            field.set(object, ((JsonNumber) kv.getValue()).getValue());
+          }...
+     } catch (NoSuchFieldException | IllegalAccessException ignored) {
+        }
+      }
+
+      return object;
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to map JSON to object: " + e.getMessage(), e);
+    }
+  }
+
+
+```
+
+#### Example of using reflection to convert a Java object into a JSON string:
+[view this file for more...](./src/main/java/com/elitekaycy/json/test/JsonTest.java)
+
+```java
+  private static final String json =
+      "{"
+          + "\"name\": \"Smartphone\","
+          + "\"price\": 699.99,"
+          + "\"inStock\": true,"
+          + "\"tags\": [\"electronics\", \"mobile\"],"
+          + "\"supplier\": {"
+          + "\"name\": \"Tech Corp\","
+          + "\"country\": \"USA\""
+          + "}"
+          + "}";
+
+
+    Product product = (Product) JavaToJsonMapper.toObject(json, Product.class);
+
+```
+
+This will generate a JSON string representation of the Product object:
+```java
+
+Product {name='Smartphone', 
+ price=0.0, 
+ inStock=false, 
+ tags=[electronics, mobile], 
+ supplier=Supplier {
+   name='Tech Corp', 
+   country='USA'
+   }}
 ```
 
 ### Compiling and Running the Application:

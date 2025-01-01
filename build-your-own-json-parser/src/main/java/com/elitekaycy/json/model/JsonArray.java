@@ -14,6 +14,10 @@ public class JsonArray extends JsonValue {
     this.elements.add(element);
   }
 
+  public List<Object> getAll() {
+    return elements;
+  }
+
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
