@@ -89,8 +89,8 @@ public class Main {
 You can use Java Reflection to convert Java objects into JSON. This is useful for serializing objects to JSON format dynamically at runtime.
 
 
-#### How it works
-Serialization (toJson)
+### How it works
+#### Serialization (toJson)
 
 The toJson method uses reflection to inspect the fields of a given object and map them to JSON keys. It handles various data types, including primitives, collections, maps, and nested objects.
 
@@ -123,7 +123,7 @@ The toJson method uses reflection to inspect the fields of a given object and ma
   }
 
 ```
-Deserialization (toObject)
+#### Deserialization (toObject)
 
 The toObject method parses a JSON string into a Java object by creating an instance of the specified class and populating its fields based on the JSON structure.
 
