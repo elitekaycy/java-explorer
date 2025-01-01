@@ -1,5 +1,6 @@
 package com.elitekaycy.json.test;
 
+import com.elitekaycy.json.annotations.JsonExclude;
 import com.elitekaycy.json.util.JavaToJsonMapper;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class JsonTest {
           + "}";
 
   class Product {
-    private String name;
+    @JsonExclude private String name;
     private double price;
     private boolean inStock;
     private List<String> tags;

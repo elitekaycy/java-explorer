@@ -1,5 +1,6 @@
 package com.elitekaycy.json.util;
 
+import com.elitekaycy.json.annotations.JsonExclude;
 import com.elitekaycy.json.lexer.Lexer;
 import com.elitekaycy.json.model.*;
 import com.elitekaycy.json.parser.Parser;
@@ -113,6 +114,7 @@ public class JavaToJsonMapper {
       for (JsonKeyValue kv : parser.getAll()) {
         try {
           Field field = cls.getDeclaredField(kv.getKey());
+          if(field.isAnnotationPresent(JsonExclude.class)) continue;
           field.setAccessible(true);
 
           if (field.getType().equals(String.class) && kv.getValue() instanceof JsonString) {
