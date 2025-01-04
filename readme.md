@@ -5,7 +5,6 @@ The goal is to deepen understanding of core concepts and create practical implem
 
 ## Topics I will cover or atleast hope to gradually
 
-### 1. Systems Design Concepts
 - [Building a caching layer (e.g., LRU Cache, Write-through Cache)](./build-your-own-simple-cache/)
 - [Building Redis from scratch](./build-your-own-redis/)
 - [Building a unix wc tool](./build-your-own-unix-wc/)
