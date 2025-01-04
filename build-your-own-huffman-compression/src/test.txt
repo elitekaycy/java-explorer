@@ -1,0 +1,30 @@
+Common Meta-Annotations
+
+    @Retention:
+        Specifies how long the annotation is retained.
+        Values: SOURCE, CLASS, RUNTIME.
+
+    @Target:
+        Specifies where the annotation can be applied.
+        Values: FIELD, METHOD, PARAMETER, CONSTRUCTOR, TYPE.
+
+    @Documented:
+        Indicates the annotation should be included in JavaDocs.
+
+    @Inherited:
+        Allows subclasses to inherit the annotation.
+
+Practical Use Cases
+
+    Logging and Profiling:
+        Use annotations like @LogExecutionTime to profile method performance.
+    Validation:
+        Implement annotations like @NotEmpty or @MinLength for input validation.
+    Dependency Injection:
+        Frameworks like Spring use annotations (@Autowired, @Qualifier) for dependency injection.
+    Custom Serialization:
+        Annotations like @JsonField to map Java fields to specific JSON keys.
+
+Summary
+
+Custom annotations provide a powerful way to add metadata to your Java code and enable reusable behaviors through reflection or AOP. By combining them with meta-annotations, you can fine-tune their behavior and scope to fit specific use cases.
