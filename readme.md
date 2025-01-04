@@ -8,6 +8,8 @@ The goal is to deepen understanding of core concepts and create practical implem
 ### 1. Systems Design Concepts
 - [Building a caching layer (e.g., LRU Cache, Write-through Cache)](./build-your-own-simple-cache/)
 - [Building Redis from scratch](./build-your-own-redis/)
+- [Building a unix wc tool](./build-your-own-unix-wc/)
+- [Building your own huffman compression](./build-your-own-huffman-compression/)
 - [Build your own json parser](./build-your-own-json-parser/)
 - Designing scalable and distributed systems
 
