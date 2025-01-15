@@ -1,0 +1,14 @@
+What i want to achieve
+
+
+./jcurl <url>  should make a get request and display everything from the header to payload data
+
+./jcurl <Keyword> GET|POST|DELETE
+
+extras should be flags < -h | ...>  
+read content type header | default should be plain text
+----> use json and html and text plain for now
+    ---> prereq
+     --> json convertor
+
+>  read content as stream and write to output
