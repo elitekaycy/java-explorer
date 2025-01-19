@@ -36,17 +36,6 @@ public class ProxyHandler implements Runnable {
 
   @Override
   public void run() {
-
-    // output stream and input stream from the client
-    // output stream and input stream from the forwarded
-
-    // extract method and url
-    // filter banned ip list
-    // filter banned words
-    // remove hop by headers
-    // add x-forwaded header
-    // write output to console
-
     try (InputStream clientInput = client.getInputStream();
         OutputStream clientOutput = client.getOutputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(clientInput));
