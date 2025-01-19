@@ -13,9 +13,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class ProxyHandler implements Runnable {
   private final Socket client;
+  private final Properties properties;
 
   private static final List<String> HOP_BY_HOP_HEADERS =
       Arrays.asList(
@@ -27,8 +29,9 @@ public class ProxyHandler implements Runnable {
           "transfer-encoding",
           "upgrade");
 
-  public ProxyHandler(Socket client) {
+  public ProxyHandler(Socket client, Properties properties) {
     this.client = client;
+    this.properties = properties;
   }
 
   @Override
@@ -50,6 +53,9 @@ public class ProxyHandler implements Runnable {
         PrintWriter clientWriter = new PrintWriter(clientOutput, true); ) {
 
       Request req = extractRequest(reader);
+
+      new ProxyFilter(this.properties).filterByBannedIps(req.host());
+
       System.out.println(req);
 
       String clientIp = client.getInetAddress().getHostAddress();
@@ -102,10 +108,6 @@ public class ProxyHandler implements Runnable {
 
     return new Request(method, url, host, port, reqHeaders);
   }
-
-  private void filterByBannedIps() {}
-
-  private void filterByBannedWords() {}
 
   private void forwardRequest(Request request, PrintWriter writer) throws IOException {
     try (Socket destination = new Socket(request.host(), request.port());
