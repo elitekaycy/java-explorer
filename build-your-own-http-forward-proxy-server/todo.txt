@@ -1,5 +1,0 @@
-- make the proxy server send to the next server
-- remove the hop headers
-- modify get
-- add the x-forwaded-header
-- forward request and print result
