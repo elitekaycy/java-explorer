@@ -10,17 +10,11 @@ The goal is to deepen understanding of core concepts and create practical implem
 - [Building a unix wc tool](./build-your-own-unix-wc/)
 - [Building your own huffman compression](./build-your-own-huffman-compression/)
 - [Build your own json parser](./build-your-own-json-parser/)
-- Designing scalable and distributed systems
 
-### 2. Databases and Query Processing
-- Implementing a SQL-like query engine
-- Understanding and building indexes
-- Exploring database transactions and consistency models
-
-### 3. Networking and Protocols
-- Building a basic HTTP server
-- Implementing a custom TCP client and server
-- Simulating load balancers and reverse proxies
+###  Networking and Protocols
+- [Building your own curl](./build-your-own-curl/)
+- [Building your own loadbalancer](./build-your-own-loadbalancer/)
+- [Build your own http forward proxy](./build-your-own-http-forward-proxy/);
 
 ### 4. Concurrency and Multithreading
 - Writing thread-safe code
