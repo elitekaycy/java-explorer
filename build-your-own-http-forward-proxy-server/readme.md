@@ -165,3 +165,14 @@ Example Output
 
 !["sample proxy img"](./docs/ppx.png)
 
+
+
+## Further Advancement
+- Still having issues making the proxy work for build-your-own-http-forward-proxy-server
+```
+error
+* OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to httpbin.org:443
+* Closing connection
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to httpbin.org:443
+
+```

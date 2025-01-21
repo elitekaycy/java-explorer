@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,26 +42,73 @@ public class ProxyHandler implements Runnable {
         BufferedReader reader = new BufferedReader(new InputStreamReader(clientInput));
         PrintWriter clientWriter = new PrintWriter(clientOutput, true); ) {
 
-      Request req = extractRequest(reader);
+      String line = reader.readLine();
+      if (line.startsWith("CONNECT")) {
+        handleHttpsTunneling(clientInput, clientOutput, line);
+      } else {
 
-      new ProxyFilter(this.properties).filterByBannedIps(req.host());
+        Request req = extractRequest(reader, line);
 
-      System.out.println(req);
+        new ProxyFilter(this.properties).filterByBannedIps(req.host());
 
-      String clientIp = client.getInetAddress().getHostAddress();
-      req.headers.put(
-          "x-forwarded-for", req.headers.getOrDefault("x-forwarded-for", "") + clientIp);
+        System.out.println(req);
 
-      HOP_BY_HOP_HEADERS.forEach(req.headers::remove);
-      forwardRequest(req, clientWriter);
+        String clientIp = client.getInetAddress().getHostAddress();
+        req.headers.put(
+            "x-forwarded-for", req.headers.getOrDefault("x-forwarded-for", "") + clientIp);
 
+        HOP_BY_HOP_HEADERS.forEach(req.headers::remove);
+        forwardRequest(req, clientWriter);
+      }
     } catch (IOException ex) {
       ex.printStackTrace();
     }
   }
 
-  private Request extractRequest(BufferedReader reader) throws IOException {
-    String requestLine = reader.readLine();
+  private void handleHttpsTunneling(
+      InputStream clientInput, OutputStream clientOutput, String requestLine) throws IOException {
+
+    String[] parts = requestLine.split(" ");
+    String[] hostAndPort = parts[1].split(":");
+    String host = hostAndPort[0];
+    int port = Integer.parseInt(hostAndPort[1]);
+
+    Socket destSocket = new Socket();
+    destSocket.setKeepAlive(true);
+    destSocket.setSoTimeout(30000);
+    destSocket.connect(new InetSocketAddress(host, port), 30000);
+
+    clientOutput.write("HTTP/1.1 200 Connection Established\r\n\r\n".getBytes());
+    clientOutput.flush();
+
+    new Thread(() -> relayData(client, destSocket)).start();
+    new Thread(() -> relayData(destSocket, client)).start();
+  }
+
+  private void relayData(Socket source, Socket destination) {
+    byte[] buffer = new byte[32768];
+    try (InputStream sourceIn = source.getInputStream();
+        OutputStream destOut = destination.getOutputStream()) {
+
+      int bytesRead;
+      while ((bytesRead = sourceIn.read(buffer)) != -1) {
+        destOut.write(buffer, 0, bytesRead);
+        destOut.flush();
+        System.out.println(": Relayed " + bytesRead + " bytes");
+      }
+    } catch (IOException ex) {
+      System.err.println(" relay error: " + ex.getMessage());
+    } finally {
+      try {
+        if (!source.isClosed()) source.close();
+        if (!destination.isClosed()) destination.close();
+      } catch (IOException e) {
+        System.err.println("Error closing sockets: " + e.getMessage());
+      }
+    }
+  }
+
+  private Request extractRequest(BufferedReader reader, String requestLine) throws IOException {
     if (requestLine == null || requestLine.isEmpty()) {
       return null;
     }
