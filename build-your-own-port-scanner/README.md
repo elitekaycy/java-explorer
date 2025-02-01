@@ -36,7 +36,6 @@ This project includes three types of scanners:
 | **SweepScanner** | One port on multiple hosts | Moderate | Finding active hosts with a specific service |
 
 ## How to Run
-s)
 
 ## Main Entry Point
 ```java
