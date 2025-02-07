@@ -1,0 +1,43 @@
+- define endpoint of service to monitor (target) , scraping intervals, other settings
+ - service should expose a /metrics endpoint 
+    (collect metrics such as http request duration, cpu usage, memory usage, etc)
+
+  - prometheus stores all collected samples locally in its own time series database
+   - promql(query data from time series database)
+ 
+  -Visualizing and Alerting: alerting rules can also be defined in prometheus trigger notifications based on conditions
+  - Service discovery (find and monitor new services as they come up or change)
+  - integration, easily integrating with thirdparty systems
+
+
+  (Health and Performance metrics)
+
+  Data Collection (Scraping)
+  Time Series Storage : Stores scraped metrcis in a time-series database
+  Query Engine (PromQl): Allows querying of collected data
+  Alerting & Notifications: Support defining alerts based on rules
+  Service Discovery: Finds targets dynamically
+
+  - Transform logs into prometheus logs
+  - prometheus does not read logs directly, it only scrapes structured metrics for http endpoint
+  - we need an exporter to transofm logs into prometheus metrics
+
+  write ahead logs
+  store in chunks 
+
+  Querying data 
+  - reads index files to find relevant time Series
+  - loads compressed chunks into memory
+  - apply promql functions to aggregate or filter data
+
+
+ Step By Step
+
+ - prometheus support 4 types and Formats (Counter, Gauge, Histogram, Summary)
+   Focus on (Application Performance Metrics(Requests, Errors, Latency), System Resource Metrics (CPU, Memory, Disk Usage), Custom Business Metrics)
+ - Metrics Collections (pulling data from applications or services)
+ - Storage (Stores time-series data)
+ - Query Engine
+ - Web Ui/API (Provides access to the collected metrics)
+
+

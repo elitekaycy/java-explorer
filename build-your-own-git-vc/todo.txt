@@ -1,0 +1,73 @@
+Git is a version control system
+ 
+ - commit
+ - stage
+ - merge
+ - add
+ - diff
+
+
+ .jvcs/ 
+   commits/
+   branches/
+   staging/
+   config/
+   objects/
+   refs/
+   HEAD 
+
+
+jvc init - should create the file directory
+           setup an initial master branch in branches directory
+           snapshot of the current state
+
+
+ git add (Stage Files)
+Blobs are created for the files that are staged.
+Each file is hashed, and the file's content is stored in a blob object.
+The blob is stored in .git/objects/ with its SHA-1 hash as the identifier.
+Index (staging area) is updated to keep track of these blobs.
+2️⃣ git commit (Commit Files)
+Tree Object Creation:
+The staged files (blobs) and their directory structure are converted into a tree object.
+The tree object reflects the organization of the files and directories at that point in time (root directory, files, subdirectories, etc.).
+The tree holds references to the blobs and potentially other trees (if there are subdirectories).
+The tree object is stored in .git/objects/ with its SHA-1 hash.
+Commit Object Creation:
+The commit object is created and points to the tree object.
+It stores metadata such as the commit message, author, and timestamp.
+The commit object can also reference a parent commit, which points to the previous state of the project.
+The commit object is also stored in .git/objects/ with its SHA-1 hash.
+3️⃣ Update HEAD and Branch Reference
+HEAD:
+The HEAD reference is updated to point to the new commit.
+Branch Reference:
+The reference to the current branch (e.g., refs/heads/master) is updated to point to the new commit hash.
+Visualizing the Process
+Stage Files (git add):
+
+Files → Blobs (stored in .git/objects/)
+Create Tree (git commit):
+
+Staged Files → Tree Object (references blobs, directories)
+Create Commit (git commit):
+
+Tree Object → Commit Object (metadata, parent commit, timestamp)
+Update HEAD and Branch Reference:
+
+HEAD → New commit
+Branch → New commit
+Final Flow in Order:
+Staging (git add)
+Create Blob objects for each file.
+Store blobs in .git/objects/.
+Update index to track the staged files.
+Commit (git commit)
+Create Tree object representing the file structure (directories + blobs).
+Store the Tree object in .git/objects/.
+Create Commit object linking to the tree and other commit metadata.
+Store the Commit object in .git/objects/.
+Update HEAD and Branch
+Point HEAD to the new commit.
+Update the branch reference (refs/heads/master) to point to the new commit.
+
