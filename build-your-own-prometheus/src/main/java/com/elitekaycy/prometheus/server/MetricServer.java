@@ -11,6 +11,9 @@ import java.util.List;
 
 import com.elitekaycy.prometheus.models.Metric;
 import com.elitekaycy.prometheus.store.MetricStore;
+
+import main.java.com.elitekaycy.prometheus.ui.WebUi;
+
 import com.elitekaycy.prometheus.query.QueryEngine;
 import com.elitekaycy.prometheus.query.QueryEngine.Query;
 
@@ -60,8 +63,13 @@ public class MetricServer {
                 default -> "HTTP/1.1 404 Not Found\r\n\r\n";
             };
 
+            String contentType = switch (path) {
+                case "/dashboard" -> "text/html";
+                default -> "text/plain";
+            };
+
             out.write("HTTP/1.1 200 OK\r\n");
-            out.write("Content-Type: text/plain\r\n");
+            out.write("Content-Type: " + contentType + "\r\n");
             out.write("Content-Length: " + response.length() + "\r\n");
             out.write("\r\n");
             out.write(response);
@@ -101,24 +109,7 @@ public class MetricServer {
     }
 
     private static String serveDashboard() {
-        return """
-                 <!DOCTYPE html>
-                 <html>
-                 <head>
-                     <title>Metrics Dashboard</title>
-                     <script src="script.js"></script>
-                 </head>
-                 <body>
-                     <h1>Metrics</h1>
-                     <table border="1">
-                         <thead>
-                             <tr><th>Name</th><th>Value</th><th>Timestamp</th></tr>
-                         </thead>
-                         <tbody id="metrics-table"></tbody>
-                     </table>
-                 </body>
-                 </html>
-                """;
+        return WebUi.serveUi();
     }
 
 }
