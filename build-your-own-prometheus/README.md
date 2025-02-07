@@ -204,3 +204,7 @@ public void run() {
 Building this Prometheus-inspired system helped me deeply understand monitoring, metric collection, querying, and alerting. I plan to refine it further with more advanced features. 🚀
 
 
+![sample1](./docs/metrics1.png)
+![sample2](./docs/metrics2.png)
+![sample3](./docs/metrics3.png)
+![sample4](./docs/metrics4.png)
