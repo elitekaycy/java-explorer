@@ -15,6 +15,8 @@ The goal is to deepen understanding of core concepts and create practical implem
 - [Building your own curl](./build-your-own-curl/)
 - [Building your own loadbalancer](./build-your-own-loadbalancer/)
 - [Build your own http forward proxy](./build-your-own-http-forward-proxy-server/)
+- [Building your own port scanner](./build-your-own-port-scanner/)
+- [Building your own dns resolver](./build-your-own-dns-resolver/)
 
 ### 4. Concurrency and Multithreading
 - Writing thread-safe code
