@@ -1,0 +1,7 @@
+configuration -> parses settings (DB_URL, etc)
+SessionFactory -> creates Session Objects like hibernate entityManager
+Sessoin handles entity operations
+Transactions manages transaction, commit and rollbalck
+EntityManagement -> maps java objects to db tables using annotations
+query engine -> processes jpql like queries
+cache -> stores frequently used entities for optimizatiomn
