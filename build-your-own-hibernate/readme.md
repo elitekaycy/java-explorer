@@ -106,9 +106,9 @@ public class App {
     
     em.close();
     emf.close();
-``
+```
 
-Transactions ensure that changes are committed to the database properly.
+-- Transactions ensure that changes are committed to the database properly.
 
 ## Database Setup
 This project uses **H2** as the database for testing and persistence. The database properties are hardcoded in `DbProperties.java`:
@@ -126,5 +126,5 @@ To check the database contents, use the H2 Console:
 4. Execute SQL queries to inspect tables and data.
 
 
-![docs]('./docs/Hibernate.png')
+![docs](./docs/Hibernate.png)
 
